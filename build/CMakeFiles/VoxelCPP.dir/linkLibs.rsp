@@ -1,0 +1,1 @@
+ thirdparty/glfw/src/libglfw3.a thirdparty/glad/libglad.a thirdparty/stb_image/libstb_image.a -lshell32 -luser32 -lopengl32 -lwinmm -lgdi32 -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 

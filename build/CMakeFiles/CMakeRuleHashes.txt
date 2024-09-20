@@ -1,0 +1,2 @@
+# Hashes of file build rules.
+2c04df0354942cc4486be74710ebb745 thirdparty/glfw/src/CMakeFiles/update_mappings

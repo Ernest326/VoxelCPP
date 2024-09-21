@@ -2,7 +2,6 @@
 #include <vector>
 #include <glad/glad.h>
 #include "buffer.hpp"
-#include "ebo.hpp"
 
 class VertexArray {
 

@@ -1,11 +1,9 @@
 #include "window.hpp"
 
-/*
 void window_size_callback(GLFWwindow* window, int x, int y);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-*/
 
 Window::~Window()
 {
@@ -17,6 +15,11 @@ Window::Window(char* title, int width, int height, bool vsync)
 	this->m_width = width;
 	this->m_height = height;
     this->m_vsync = vsync;
+
+    if(!init()) {
+        std::runtime_error("ERROR: Window creation failed!");
+    }
+
 }
 
 bool Window::init()
@@ -47,17 +50,15 @@ bool Window::init()
         return false;
     }
 
-    /*
 	glfwSetWindowSizeCallback(m_window, window_size_callback);
 	glfwSetKeyCallback(m_window, key_callback);
 	glfwSetMouseButtonCallback(m_window, mouse_button_callback);
 	glfwSetCursorPosCallback(m_window, mouse_callback);
-    */
 
     if (m_vsync) {
         glfwSwapInterval(1);
     }
-    std::cout << "VSYNC ENABLED: "+m_vsync << std::endl;
+    std::cout << "VSYNC ENABLED: " << m_vsync << std::endl;
 
 	for (int i = 0; i < MAX_KEYS; i++) {
 		m_key[i] = false;

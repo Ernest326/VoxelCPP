@@ -55,6 +55,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   include
 )
 
+#Copy shaders folder to build
+file(COPY src/shaders DESTINATION ./)
+
 #Building
 if (WIN32)
   message(STATUS "CREATING BUILD FOR WINDOWS")

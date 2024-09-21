@@ -4,6 +4,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "window.hpp"
+#include "../Engine/buffers/buffers.hpp"
+#include "../Engine/shader.hpp"
 
 class App {
 

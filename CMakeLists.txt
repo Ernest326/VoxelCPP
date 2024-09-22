@@ -55,8 +55,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   include
 )
 
-#Copy shaders folder to build
+#Copy shaders/res folder to build
 file(COPY src/shaders DESTINATION ./)
+file(COPY src/res DESTINATION ./)
 
 #Building
 if (WIN32)

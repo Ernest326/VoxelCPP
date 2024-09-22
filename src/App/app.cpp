@@ -1,4 +1,5 @@
 #include "app.hpp"
+#define STB_IMAGE_IMPLEMENTATION
 
 App::~App() {}
 
@@ -100,6 +101,6 @@ void App::run() {
         //Update screen + input
         window.update();
     }
-
     glfwTerminate();
+    
 }

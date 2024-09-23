@@ -11,11 +11,10 @@ void App::run() {
     Shader test_shader("shaders/test_3d.vert", "shaders/test_3d.frag");
 
     //3D projection matrices
-    glm::mat4 projection = glm::mat4(1.0f);
+    glm::mat4 projection = glm::mat4(1.0);
     glm::mat4 cam_view = glm::mat4(1.0);
     glm::mat4 model = glm::mat4(1.0);
     
-    model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0,1,0));
     cam_view = glm::translate(cam_view, glm::vec3(0.0f, 0.0f, -5.0f));
     projection = glm::perspective(glm::radians(45.0f), (float)window.getWidth()/(float)window.getHeight(), 0.1f, 100.0f);
 
@@ -96,7 +95,7 @@ void App::run() {
         test_shader.disable();
 
         //ROTATE THAT SHIIII
-        model = glm::rotate(model, glm::radians(0.01f), glm::vec3(1.0f, 0.3f, 0.5f));
+        model = glm::rotate(model, glm::radians(5.0f), glm::vec3(1.0f, 0.3f, 0.5f));
 
         //Update screen + input
         window.update();

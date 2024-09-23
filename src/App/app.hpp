@@ -11,6 +11,7 @@
 #include "../Engine/buffers/buffers.hpp"
 #include "../Engine/shader.hpp"
 #include "../Engine/texture2d.hpp"
+#include "../Engine/spectator_camera.hpp"
 
 class App {
 
@@ -24,9 +25,15 @@ public:
     void run();
 
 private:
+
+    float deltaTime, lastFrame;
+    void calculateDeltaTime() {
+        deltaTime = lastFrame-glfwGetTime();
+        lastFrame = glfwGetTime();
+    }
+
     void drawFrame();
     bool initGL();
-
     Window window{"Voxel Engine", WIDTH, HEIGHT};
 
 };

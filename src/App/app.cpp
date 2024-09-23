@@ -8,6 +8,8 @@ App::App() {
 
 void App::run() {
 
+    SpectatorCamera cam(glm::vec3(0, 0, -5));
+
     Shader test_shader("shaders/test_tex.vert", "shaders/test_tex.frag");
     Texture2D tex_grass("res/grass.png", GL_REPEAT, GL_NEAREST);
 
@@ -19,6 +21,7 @@ void App::run() {
     cam_view = glm::translate(cam_view, glm::vec3(0.0f, 0.0f, -5.0f));
     projection = glm::perspective(glm::radians(45.0f), (float)window.getWidth()/(float)window.getHeight(), 0.1f, 100.0f);
 
+    //Cube
 	GLfloat cube_vertices[] =
 	{
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -65,13 +68,29 @@ void App::run() {
 	};
 
     VertexArray VAO;
-    //Cube buffer data
     VAO.addBuffer(new Buffer(cube_vertices, sizeof(cube_vertices), 3), 0, 5, 0);
     VAO.addBuffer(new Buffer(cube_vertices, sizeof(cube_vertices), 2), 1, 5, 3);
 
+    //Enable OpenGL stuff
     glEnable(GL_DEPTH_TEST);
 
     while(!window.closed()) {
+
+        calculateDeltaTime();
+        
+        //Process Spectator Camera Input
+        if(window.isKeyPressed(GLFW_KEY_W)) {
+            cam.processKeyboard(SpectatorCamera::FORWARD, deltaTime);
+        }
+        if(window.isKeyPressed(GLFW_KEY_A)) {
+            cam.processKeyboard(SpectatorCamera::LEFT, deltaTime);
+        }
+        if(window.isKeyPressed(GLFW_KEY_S)) {
+            cam.processKeyboard(SpectatorCamera::BACKWARD, deltaTime);
+        }
+        if(window.isKeyPressed(GLFW_KEY_D)) {
+            cam.processKeyboard(SpectatorCamera::RIGHT, deltaTime);
+        }
 
         //Clear screen
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -80,7 +99,7 @@ void App::run() {
         //Draw triangle
         test_shader.enable();
         test_shader.setMatrix4("projection", projection);
-        test_shader.setMatrix4("view", cam_view);
+        test_shader.setMatrix4("view", cam.getViewMatrix());
         test_shader.setMatrix4("model", model);
 
         tex_grass.bind();

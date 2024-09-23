@@ -10,6 +10,7 @@
 #include "window.hpp"
 #include "../Engine/buffers/buffers.hpp"
 #include "../Engine/shader.hpp"
+#include "../Engine/texture2d.hpp"
 
 class App {
 

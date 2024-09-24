@@ -64,6 +64,10 @@ bool Window::init()
 		m_key[i] = false;
 	}
 
+	for (int i = 0; i < MAX_KEYS; i++) {
+		m_key_pressed[i] = false;
+	}
+
 	for (int i = 0; i < MAX_BUTTONS; i++) {
 		m_button[i] = false;
 	}

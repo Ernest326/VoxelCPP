@@ -5,7 +5,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-
 #include <imgui-docking/imgui/imgui.h>
 #include <imgui-docking/imgui/backends/imgui_impl_glfw.h>
 #include <imgui-docking/imgui/backends/imgui_impl_opengl3.h>

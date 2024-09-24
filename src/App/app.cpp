@@ -122,13 +122,11 @@ void App::run() {
             cam.processKeyboard(SpectatorCamera::RIGHT, deltaTime);
         }
 
-
-        cam.processMouse(window.offset_x, window.offset_y);
-
         //Other input
         if(window.isKeyPressed(GLFW_KEY_Q)) {
             glfwSetWindowShouldClose(window.getWindow(), true);
         }
+
         if(window.isKeyPressed(GLFW_KEY_Z)) {
             wireframe=!wireframe;
             if(wireframe) {
@@ -146,6 +144,11 @@ void App::run() {
             }
         }
 
+        //Camera Rotation
+        if(focused) {
+            cam.processMouse(window.offset_x, window.offset_y);
+        }
+
         //Draw triangle
         test_shader.enable();
         test_shader.setMatrix4("projection", projection);
@@ -160,7 +163,7 @@ void App::run() {
         test_shader.disable();
 
         //ROTATE THAT SHIIII
-        model = glm::rotate(model, glm::radians(1.0f), glm::vec3(1.0f, 0.3f, 0.5f));
+        model = glm::rotate(model, glm::radians(10.0f*deltaTime), glm::vec3(1.0f, 0.3f, 0.5f));
 
         //ImGUI update
         ImGui::Render();

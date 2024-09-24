@@ -25,7 +25,7 @@ public:
     bool closed() { return glfwWindowShouldClose(m_window); }
 
     void clear() const;
-    void update() const;
+    void update();
 
     int getWidth() const { return m_width; }
     int getHeight() const { return m_height; }
@@ -35,10 +35,9 @@ public:
 
     GLFWwindow* &getWindow() { return m_window; }
 
-    double lastx;
-    double lasty;
-    double mousex;
-    double mousey;
+    double last_x, last_y;
+    double mouse_x, mouse_y;
+    double offset_x, offset_y;
 
 private:
     bool init();

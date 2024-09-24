@@ -8,6 +8,9 @@ App::App() {
 
 void App::run() {
 
+
+
+    //Main camera
     SpectatorCamera cam(glm::vec3(0, 0, -5));
 
     Shader test_shader("shaders/test_tex.vert", "shaders/test_tex.frag");
@@ -71,10 +74,17 @@ void App::run() {
     VAO.addBuffer(new Buffer(cube_vertices, sizeof(cube_vertices), 3), 0, 5, 0);
     VAO.addBuffer(new Buffer(cube_vertices, sizeof(cube_vertices), 2), 1, 5, 3);
 
+    //Disable mouse so you can look around
+	glfwSetInputMode(window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     //Enable OpenGL stuff
     glEnable(GL_DEPTH_TEST);
 
     while(!window.closed()) {
+
+        //Clear screen
+        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+        window.clear();
 
         calculateDeltaTime();
         
@@ -91,10 +101,18 @@ void App::run() {
         if(window.isKeyPressed(GLFW_KEY_D)) {
             cam.processKeyboard(SpectatorCamera::RIGHT, deltaTime);
         }
+        cam.processMouse(window.offset_x, window.offset_y);
 
-        //Clear screen
-        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-        window.clear();
+        //Other input
+        if(window.isKeyPressed(GLFW_KEY_Q)) {
+            glfwSetWindowShouldClose(window.getWindow(), true);
+        }
+        if(window.isKeyPressed(GLFW_KEY_1)) {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        }
+        if(window.isKeyPressed(GLFW_KEY_2)) {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
 
         //Draw triangle
         test_shader.enable();
@@ -107,8 +125,7 @@ void App::run() {
         glDrawArrays(GL_TRIANGLES, 0, 36);
         VAO.unbind();
         tex_grass.unbind();
-
-        //test_shader.disable();
+        test_shader.disable();
 
         //ROTATE THAT SHIIII
         model = glm::rotate(model, glm::radians(1.0f), glm::vec3(1.0f, 0.3f, 0.5f));

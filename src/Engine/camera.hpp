@@ -11,11 +11,13 @@ public:
     glm::mat4 projection;
 
 public:
-    Camera(glm::vec3 pos=glm::vec3(0,0,0), glm::vec3 up=glm::vec3(0,1,0), float pitch=0.0f, float yaw=-90.0f);
+    Camera(glm::vec3 pos=glm::vec3(0,0,0), glm::vec3 up=glm::vec3(0,1,0), float pitch=0.0f, float yaw=0.0f);
     glm::mat4 getViewMatrix();
 
 protected:
-    void updateCameraVectors();
     glm::vec3 worldUp;
+
+public:
+    void updateCameraVectors();
 
 };

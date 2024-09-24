@@ -75,9 +75,28 @@ void Window::clear() const {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Window::update() const {
+void Window::update() {
     glfwSwapBuffers(m_window);
+	offset_x=0;
+	offset_y=0;
     glfwPollEvents();
+}
+
+
+bool Window::isKeyPressed(unsigned int key) const
+{
+	if (key >= MAX_KEYS) {
+		return false;
+	}
+	return m_key[key];
+}
+
+bool Window::isButtonPressed(unsigned int button) const
+{
+	if (button >= MAX_BUTTONS) {
+		return false;
+	}
+	return m_button[button];
 }
 
 void window_size_callback(GLFWwindow* window, int x, int y) {
@@ -102,20 +121,20 @@ void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	Window* win = (Window*)glfwGetWindowUserPointer(window);
 
-	win->mousex = xpos;
-	win->mousey = ypos;
+	win->mouse_x = xpos;
+	win->mouse_y = ypos;
 
 	if (win->firstMouse) {
 		win->firstMouse = false;
 
-		win->lastx = xpos;
-		win->lasty = ypos;
+		win->last_x = xpos;
+		win->last_y = ypos;
 	}
 
-	float xoffset = xpos - win->lastx;
-	float yoffset = win->lasty - ypos;
+	win->offset_x = xpos - win->last_x;
+	win->offset_y = win->last_y - ypos;
 
-	win->lastx = xpos;
-	win->lasty = ypos;
+	win->last_x = xpos;
+	win->last_y = ypos;
     
 }

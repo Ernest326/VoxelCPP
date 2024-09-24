@@ -36,4 +36,6 @@ private:
     bool initGL();
     Window window{"Voxel Engine", WIDTH, HEIGHT};
 
+    friend void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+
 };

@@ -23,6 +23,8 @@ void SpectatorCamera::processKeyboard(CAMERA_MOVEMENT direction, float deltaTime
     if(direction==DOWN) {
         position+=v*-worldUp;
     }
+
+    updateCameraVectors();
     
 }
 

@@ -1,5 +1,4 @@
 #include "app.hpp"
-#define STB_IMAGE_IMPLEMENTATION
 
 App::~App() {}
 
@@ -8,7 +7,14 @@ App::App() {
 
 void App::run() {
 
+    //ImGUI init
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; 
 
+    ImGui_ImplGlfw_InitForOpenGL(window.getWindow(), true);
+	ImGui_ImplOpenGL3_Init();
 
     //Main camera
     SpectatorCamera cam(glm::vec3(0, 0, -5));
@@ -86,6 +92,12 @@ void App::run() {
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         window.clear();
 
+        //ImGUI test window
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        ImGui::ShowDemoWindow();
+
         calculateDeltaTime();
         
         //Process Spectator Camera Input
@@ -130,9 +142,19 @@ void App::run() {
         //ROTATE THAT SHIIII
         model = glm::rotate(model, glm::radians(1.0f), glm::vec3(1.0f, 0.3f, 0.5f));
 
+        //ImGUI update
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         //Update screen + input
         window.update();
+
     }
+    //Clear ImGUI
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     glfwTerminate();
     
 }

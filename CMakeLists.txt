@@ -32,6 +32,7 @@ set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 add_subdirectory(thirdparty/glfw)
 add_subdirectory(thirdparty/glad)
 add_subdirectory(thirdparty/stb_image)
+add_subdirectory(thirdparty/imgui-docking)
 
 #Add all src files
 include_directories(thirdparty)
@@ -52,6 +53,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   thirdparty/glm
   thirdparty/glad/include
   thirdparty/stb_image/include
+  thirdparty/imgui-docking/imgui
   include
 )
 
@@ -72,15 +74,15 @@ if (WIN32)
   )
   endif()
 
-  target_link_libraries(${PROJECT_NAME} glfw glad stb_image shell32 user32 opengl32 winmm gdi32)
+  target_link_libraries(${PROJECT_NAME} glfw glad stb_image imgui shell32 user32 opengl32 winmm gdi32)
   target_link_directories(${PROJECT_NAME} PUBLIC
     ${GLFW_LIB}
   )
 
 elseif (UNIX)
     message(STATUS "CREATING BUILD FOR UNIX")
-    target_link_libraries(${PROJECT_NAME} glfw glad stb_image dl)
+    target_link_libraries(${PROJECT_NAME} glfw glad stb_image imgui dl)
 elseif (APPLE)
     message(STATUS "CREATING BUILD FOR MAC")
-    target_link_libraries(${PROJECT_NAME} glfw glad stb_image dl)
+    target_link_libraries(${PROJECT_NAME} glfw glad stb_image imgui dl)
 endif()

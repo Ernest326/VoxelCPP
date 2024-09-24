@@ -20,7 +20,7 @@ void App::run() {
     bool wireframe=false;
 
     //Main camera
-    SpectatorCamera cam(glm::vec3(0, 0, -5));
+    SpectatorCamera cam(glm::vec3(0, 0, 5));
 
     Shader test_shader("shaders/test_tex.vert", "shaders/test_tex.frag");
     Texture2D tex_grass("res/grass.png", GL_REPEAT, GL_NEAREST);
@@ -104,8 +104,8 @@ void App::run() {
 
         //ImGUI
         ImGui::Begin("Debug");
-        ImGui::SameLine();
-        ImGui::Text("FPS: %d",(int)(1000.0f/deltaTime));
+        ImGui::Text("FPS: %d",(int)(1.0f/deltaTime));
+        ImGui::Text("Position: %.2f, %.2f, %.2f", cam.position.x, cam.position.y, cam.position.z);
         ImGui::End();
 
         //Process Spectator Camera Input

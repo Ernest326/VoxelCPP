@@ -15,6 +15,7 @@ private:
     int m_width, m_height;
 
     bool m_key[MAX_KEYS];
+    bool m_key_pressed[MAX_KEYS];
     bool m_button[MAX_BUTTONS];
     bool m_vsync;
 
@@ -30,6 +31,7 @@ public:
     int getWidth() const { return m_width; }
     int getHeight() const { return m_height; }
 
+    bool isKeyHeld(unsigned int key) const;
     bool isKeyPressed(unsigned int key) const;
     bool isButtonPressed(unsigned int button) const;
 

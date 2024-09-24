@@ -16,6 +16,9 @@ void App::run() {
     ImGui_ImplGlfw_InitForOpenGL(window.getWindow(), true);
 	ImGui_ImplOpenGL3_Init();
 
+    bool focused = true;
+    bool wireframe=false;
+
     //Main camera
     SpectatorCamera cam(glm::vec3(0, 0, -5));
 
@@ -92,38 +95,55 @@ void App::run() {
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         window.clear();
 
-        //ImGUI test window
+        //ImGUI frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        ImGui::ShowDemoWindow();
 
         calculateDeltaTime();
-        
+
+        //ImGUI
+        ImGui::Begin("Debug");
+        ImGui::SameLine();
+        ImGui::Text("FPS: %d",(int)(1000.0f/deltaTime));
+        ImGui::End();
+
         //Process Spectator Camera Input
-        if(window.isKeyPressed(GLFW_KEY_W)) {
+        if(window.isKeyHeld(GLFW_KEY_W)) {
             cam.processKeyboard(SpectatorCamera::FORWARD, deltaTime);
         }
-        if(window.isKeyPressed(GLFW_KEY_A)) {
+        if(window.isKeyHeld(GLFW_KEY_A)) {
             cam.processKeyboard(SpectatorCamera::LEFT, deltaTime);
         }
-        if(window.isKeyPressed(GLFW_KEY_S)) {
+        if(window.isKeyHeld(GLFW_KEY_S)) {
             cam.processKeyboard(SpectatorCamera::BACKWARD, deltaTime);
         }
-        if(window.isKeyPressed(GLFW_KEY_D)) {
+        if(window.isKeyHeld(GLFW_KEY_D)) {
             cam.processKeyboard(SpectatorCamera::RIGHT, deltaTime);
         }
+
+
         cam.processMouse(window.offset_x, window.offset_y);
 
         //Other input
         if(window.isKeyPressed(GLFW_KEY_Q)) {
             glfwSetWindowShouldClose(window.getWindow(), true);
         }
-        if(window.isKeyPressed(GLFW_KEY_1)) {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        if(window.isKeyPressed(GLFW_KEY_Z)) {
+            wireframe=!wireframe;
+            if(wireframe) {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            } else {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            }
         }
-        if(window.isKeyPressed(GLFW_KEY_2)) {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        if(window.isKeyPressed(GLFW_KEY_F)) {
+            focused=!focused;
+            if(focused) {
+                glfwSetInputMode(window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            } else {
+                glfwSetInputMode(window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            }
         }
 
         //Draw triangle

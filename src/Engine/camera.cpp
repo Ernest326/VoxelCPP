@@ -12,7 +12,7 @@ Camera::Camera(glm::vec3 pos, glm::vec3 up, float pitch, float yaw) {
 }
 
 glm::mat4 Camera::getViewMatrix() {
-    return glm::lookAt(position, position-front, worldUp);
+    return glm::lookAt(position, position+front, worldUp);
 }
 
 void Camera::updateCameraVectors() {

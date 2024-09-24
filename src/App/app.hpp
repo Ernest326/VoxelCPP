@@ -36,7 +36,7 @@ private:
 
     float deltaTime, lastFrame;
     void calculateDeltaTime() {
-        deltaTime = lastFrame-glfwGetTime();
+        deltaTime = glfwGetTime()-lastFrame;
         lastFrame = glfwGetTime();
     }
 

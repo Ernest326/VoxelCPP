@@ -33,7 +33,7 @@ void SpectatorCamera::processMouse(float x, float y) {
     x*=sensitivity;
     y*=sensitivity;
 
-    pitch -= y;
+    pitch += y;
     yaw += x;
 
     updateCameraVectors();

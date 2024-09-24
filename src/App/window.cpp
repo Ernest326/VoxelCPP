@@ -79,16 +79,27 @@ void Window::update() {
     glfwSwapBuffers(m_window);
 	offset_x=0;
 	offset_y=0;
+	for(int i=0; i<MAX_KEYS; i++){
+		m_key_pressed[i]=false;
+	}
     glfwPollEvents();
 }
 
+
+bool Window::isKeyHeld(unsigned int key) const
+{
+	if (key >= MAX_KEYS) {
+		return false;
+	}
+	return m_key[key];
+}
 
 bool Window::isKeyPressed(unsigned int key) const
 {
 	if (key >= MAX_KEYS) {
 		return false;
 	}
-	return m_key[key];
+	return m_key_pressed[key];
 }
 
 bool Window::isButtonPressed(unsigned int button) const
@@ -111,6 +122,7 @@ void window_size_callback(GLFWwindow* window, int x, int y) {
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	Window* win = (Window*)glfwGetWindowUserPointer(window);
 	win->m_key[key] = action != GLFW_RELEASE;
+	win->m_key_pressed[key] = action == GLFW_PRESS;
 }
 
 void mouse_button_callback(GLFWwindow *window, int button, int action, int mods) {

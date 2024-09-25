@@ -16,7 +16,7 @@ private:
     BLOCKTYPE m_block_type;
     bool m_active;
 public:
-    Voxel(BLOCKTYPE=AIR) : Voxel(m_block_type)
+    Voxel(BLOCKTYPE=AIR);
     ~Voxel();
     bool setActive() { m_active=true; }
 };

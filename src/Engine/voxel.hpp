@@ -1,24 +1,22 @@
 #pragma once
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include "buffers/buffers.hpp"
-#include "shader.hpp";
+
+//KEEPING THIS CLASS AS OPTIMIZED AS POSSIBLE, WITH AS FEW MEMBERS AS I CAN (Treat more like a data structure than an object)
+//LET OTHER CLASSES DO THE WORK SUCH AS DRAWING AND STORING DATA
 
 class Voxel {
-
-private:
-    glm::vec3 position;
-    unsigned short block_type;
-
 public:
-    Voxel();
-    Voxel(glm::vec3 position);
-    Voxel(glm::vec3 position, unsigned short block_type);
-
-    void Draw();
-    void Translate(glm::vec3 pos) { position=pos; }
-
-    glm::vec3 getPosition() const { return position; }
-    int getType() const { return block_type; }
-
+    enum BLOCKTYPE {
+        AIR,
+        GRASS,
+        DIRT,
+        STONE,
+        SAND
+    };
+private:
+    BLOCKTYPE m_block_type;
+    bool m_active;
+public:
+    Voxel(BLOCKTYPE=AIR) : Voxel(m_block_type)
+    ~Voxel();
+    bool setActive() { m_active=true; }
 };

@@ -10,7 +10,7 @@ class Chunk {
 
 private:
     int x, y, z;
-    const unsigned short CHUNK_SIZE = 16;
+    const int CHUNK_SIZE = 16;
     VertexArray m_chunkVAO;
     std::vector<GLfloat> m_vertexinfo;
     Voxel * * * m_voxels;
@@ -18,7 +18,7 @@ private:
     int m_cubecount = 0;
 
 public:
-    Chunk(int x=0, int y=0);
+    Chunk(int x=0, int y=0, int z=0);
     ~Chunk();
     void DrawChunk();
 private:

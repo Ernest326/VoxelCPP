@@ -156,7 +156,7 @@ void App::run() {
         test_shader.enable();
         test_shader.setMatrix4("projection", projection);
         test_shader.setMatrix4("view", cam.getViewMatrix());
-        test_shader.setMatrix4("model", model);
+        test_shader.setMatrix4("model", glm::mat4(1.0f));
 
         tex_grass.bind();
         VAO.bind();
@@ -173,6 +173,7 @@ void App::run() {
 
         tex_grass.bind();
         test_chunk.DrawChunk();
+        tex_grass.unbind();
         
         cube_shader.disable();
 

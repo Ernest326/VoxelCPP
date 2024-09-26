@@ -23,7 +23,10 @@ void App::run() {
     SpectatorCamera cam(glm::vec3(0, 0, 5));
 
     Shader test_shader("shaders/test_tex.vert", "shaders/test_tex.frag");
+    Shader cube_shader("shaders/voxel.vert", "shaders/voxel.frag");
     Texture2D tex_grass("res/grass.png", GL_REPEAT, GL_NEAREST);
+
+    Chunk test_chunk;
 
     //3D projection matrices
     glm::mat4 projection = glm::mat4(1.0);
@@ -149,7 +152,7 @@ void App::run() {
             cam.processMouse(window.offset_x, window.offset_y);
         }
 
-        //Draw triangle
+        //Draw cube
         test_shader.enable();
         test_shader.setMatrix4("projection", projection);
         test_shader.setMatrix4("view", cam.getViewMatrix());
@@ -161,6 +164,17 @@ void App::run() {
         VAO.unbind();
         tex_grass.unbind();
         test_shader.disable();
+
+        //Draw chunk
+        cube_shader.enable();
+        cube_shader.setMatrix4("projection", projection);
+        cube_shader.setMatrix4("view", cam.getViewMatrix());
+        cube_shader.setMatrix4("model", glm::mat4(1.0));
+
+        tex_grass.bind();
+        test_chunk.DrawChunk();
+        
+        cube_shader.disable();
 
         //ROTATE THAT SHIIII
         model = glm::rotate(model, glm::radians(10.0f*deltaTime), glm::vec3(1.0f, 0.3f, 0.5f));

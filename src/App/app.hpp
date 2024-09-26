@@ -17,6 +17,7 @@
 #include "../Engine/shader.hpp"
 #include "../Engine/texture2d.hpp"
 #include "../Engine/spectator_camera.hpp"
+#include "../Engine/chunk.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 

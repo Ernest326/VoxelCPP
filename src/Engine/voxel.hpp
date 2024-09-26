@@ -6,7 +6,6 @@
 class Voxel {
 public:
     enum BLOCKTYPE {
-        AIR,
         GRASS,
         DIRT,
         STONE,
@@ -14,9 +13,9 @@ public:
     };
 private:
     BLOCKTYPE m_block_type;
-    bool m_active;
+    bool m_active=true;
 public:
-    Voxel(BLOCKTYPE=AIR);
-    ~Voxel();
-    bool setActive() { m_active=true; }
+    Voxel(BLOCKTYPE block=GRASS) { m_block_type=block; }
+    void setActive() { m_active=true; }
+    bool getActive() { return m_active; }
 };

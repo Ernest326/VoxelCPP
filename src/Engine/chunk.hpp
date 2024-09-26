@@ -15,8 +15,6 @@ private:
     std::vector<GLfloat> m_vertexinfo;
     Voxel * * * m_voxels;
 
-    int m_cubecount = 0;
-
 public:
     Chunk(int x=0, int y=0, int z=0);
     ~Chunk();

@@ -20,7 +20,7 @@ public:
     ~Chunk();
     void DrawChunk();
 private:
-    void AddCube(int x, int y, int z);
+    void AddCube(int x, int y, int z, Voxel::BLOCKTYPE block);
     VertexArray GenerateBuffer();
 
 };

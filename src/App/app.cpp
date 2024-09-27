@@ -25,6 +25,7 @@ void App::run() {
     Shader test_shader("shaders/test_tex.vert", "shaders/test_tex.frag");
     Shader cube_shader("shaders/voxel.vert", "shaders/voxel.frag");
     Texture2D tex_grass("res/grass.png", GL_REPEAT, GL_NEAREST);
+    Texture2D chunk_tex("res/tilesheet.png", GL_REPEAT, GL_NEAREST);
 
     Chunk test_chunk;
     Chunk test_chunk_2(1, 0, 0);
@@ -172,10 +173,10 @@ void App::run() {
         cube_shader.setMatrix4("view", cam.getViewMatrix());
         cube_shader.setMatrix4("model", glm::mat4(1.0));
 
-        tex_grass.bind();
+        chunk_tex.bind();
         test_chunk.DrawChunk();
         test_chunk_2.DrawChunk();
-        tex_grass.unbind();
+        chunk_tex.unbind();
         
         cube_shader.disable();
 

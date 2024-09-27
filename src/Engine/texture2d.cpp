@@ -23,6 +23,7 @@ Texture2D::Texture2D(char* path, GLint wrap, GLint filter, GLsizei samples)
 
 Texture2D::~Texture2D()
 {
+	glDeleteTextures(1, &m_texture);
 }
 
 void Texture2D::loadTexture()

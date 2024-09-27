@@ -45,84 +45,88 @@ VertexArray Chunk::GenerateBuffer() {
         for (int y = 0; y < CHUNK_SIZE; y++) {
             for (int z = 0; z < CHUNK_SIZE; z++) {
                 if(m_voxels[x][y][z].getActive()) {
-                    AddCube(x, y, z);
+                    AddCube(x, y, z, m_voxels[x][y][z].getBlockType());
                 }
             }
         }
     }
 
     VertexArray VAO;
-    VAO.addBuffer(new Buffer(&m_vertexinfo[0], m_vertexinfo.size()*sizeof(GLfloat), 3), 0, 5, 0);
-    VAO.addBuffer(new Buffer(&m_vertexinfo[0], m_vertexinfo.size()*sizeof(GLfloat), 2), 1, 5, 3);
+    VAO.addBuffer(new Buffer(&m_vertexinfo[0], m_vertexinfo.size()*sizeof(GLfloat), 3), 0, 8, 0);
+    VAO.addBuffer(new Buffer(&m_vertexinfo[0], m_vertexinfo.size()*sizeof(GLfloat), 3), 1, 8, 3);
+    VAO.addBuffer(new Buffer(&m_vertexinfo[0], m_vertexinfo.size()*sizeof(GLfloat), 2), 2, 8, 6);
 
     return VAO;
 
 }
 
-void Chunk::AddCube(int x, int y, int z) {
+void Chunk::AddCube(int x, int y, int z, Voxel::BLOCKTYPE block) {
 
     float x_off = x + CHUNK_SIZE*this->x + (float)(-CHUNK_SIZE)/2 + 0.5f;
     float y_off = y + CHUNK_SIZE*this->y + (float)(-CHUNK_SIZE)   + 0.5f;
     float z_off = z + CHUNK_SIZE*this->z + (float)(-CHUNK_SIZE)/2 + 0.5f;
 
+    float tex_size = (1.0/4.0);
+    float tex_x = tex_size*block;
+
     GLfloat back_verts[] = {
         //BACK FACE
-        -0.5f + x_off, -0.5f + y_off, -0.5f + z_off,  0.0f, 0.0f,
-		 0.5f + x_off, -0.5f + y_off, -0.5f + z_off,  1.0f, 0.0f,
-		 0.5f + x_off,  0.5f + y_off, -0.5f + z_off,  1.0f, 1.0f,
-		 0.5f + x_off,  0.5f + y_off, -0.5f + z_off,  1.0f, 1.0f,
-		-0.5f + x_off,  0.5f + y_off, -0.5f + z_off,  0.0f, 1.0f,
-		-0.5f + x_off, -0.5f + y_off, -0.5f + z_off,  0.0f, 0.0f,
+        -0.5f + x_off, -0.5f + y_off, -0.5f + z_off, 0.0f, 0.0f, -1.0f, tex_x, 0.0f,
+		 0.5f + x_off, -0.5f + y_off, -0.5f + z_off, 0.0f, 0.0f, -1.0f, tex_x+tex_size, 0.0f,
+		 0.5f + x_off,  0.5f + y_off, -0.5f + z_off, 0.0f, 0.0f, -1.0f, tex_x+tex_size, 1.0f,
+		 0.5f + x_off,  0.5f + y_off, -0.5f + z_off, 0.0f, 0.0f, -1.0f, tex_x+tex_size, 1.0f,
+		-0.5f + x_off,  0.5f + y_off, -0.5f + z_off, 0.0f, 0.0f, -1.0f, tex_x, 1.0f,
+		-0.5f + x_off, -0.5f + y_off, -0.5f + z_off, 0.0f, 0.0f, -1.0f, tex_x, 0.0f,
     };
 
     GLfloat front_verts[] = {
         //FRONT FACE
-		-0.5f + x_off, -0.5f + y_off,  0.5f + z_off,  0.0f, 0.0f,
-		 0.5f + x_off, -0.5f + y_off,  0.5f + z_off,  1.0f, 0.0f,
-		 0.5f + x_off,  0.5f + y_off,  0.5f + z_off,  1.0f, 1.0f,
-		 0.5f + x_off,  0.5f + y_off,  0.5f + z_off,  1.0f, 1.0f,
-		-0.5f + x_off,  0.5f + y_off,  0.5f + z_off,  0.0f, 1.0f,
-		-0.5f + x_off, -0.5f + y_off,  0.5f + z_off,  0.0f, 0.0f,
+		-0.5f + x_off, -0.5f + y_off, 0.5f + z_off, 0.0f, 0.0f, 1.0f, tex_x, 0.0f,
+		 0.5f + x_off, -0.5f + y_off, 0.5f + z_off, 0.0f, 0.0f, 1.0f, tex_x+tex_size, 0.0f,
+		 0.5f + x_off,  0.5f + y_off, 0.5f + z_off, 0.0f, 0.0f, 1.0f, tex_x+tex_size, 1.0f,
+		 0.5f + x_off,  0.5f + y_off, 0.5f + z_off, 0.0f, 0.0f, 1.0f, tex_x+tex_size, 1.0f,
+		-0.5f + x_off,  0.5f + y_off, 0.5f + z_off, 0.0f, 0.0f, 1.0f, tex_x, 1.0f,
+		-0.5f + x_off, -0.5f + y_off, 0.5f + z_off, 0.0f, 0.0f, 1.0f, tex_x, 0.0f,
     };
 
     GLfloat left_verts[] = {
         //LEFT FACE
-		-0.5f + x_off,  0.5f + y_off,  0.5f + z_off,  1.0f, 0.0f,
-		-0.5f + x_off,  0.5f + y_off, -0.5f + z_off,  1.0f, 1.0f,
-		-0.5f + x_off, -0.5f + y_off, -0.5f + z_off,  0.0f, 1.0f,
-		-0.5f + x_off, -0.5f + y_off, -0.5f + z_off,  0.0f, 1.0f,
-		-0.5f + x_off, -0.5f + y_off,  0.5f + z_off,  0.0f, 0.0f,
-		-0.5f + x_off,  0.5f + y_off,  0.5f + z_off,  1.0f, 0.0f,
+		-0.5f + x_off,  0.5f + y_off,  0.5f + z_off, -1.0f, 0.0f, 0.0f, tex_x+tex_size, 0.0f,
+		-0.5f + x_off,  0.5f + y_off, -0.5f + z_off, -1.0f, 0.0f, 0.0f, tex_x+tex_size, 1.0f,
+		-0.5f + x_off, -0.5f + y_off, -0.5f + z_off, -1.0f, 0.0f, 0.0f, tex_x, 1.0f,
+		-0.5f + x_off, -0.5f + y_off, -0.5f + z_off, -1.0f, 0.0f, 0.0f, tex_x, 1.0f,
+		-0.5f + x_off, -0.5f + y_off,  0.5f + z_off, -1.0f, 0.0f, 0.0f, tex_x, 0.0f,
+		-0.5f + x_off,  0.5f + y_off,  0.5f + z_off, -1.0f, 0.0f, 0.0f, tex_x+tex_size, 0.0f,
     };
 
     GLfloat right_verts[] = {
         //RIGHT FACE
-		 0.5f + x_off,  0.5f + y_off,  0.5f + z_off,  1.0f, 0.0f,
-		 0.5f + x_off,  0.5f + y_off, -0.5f + z_off,  1.0f, 1.0f,
-		 0.5f + x_off, -0.5f + y_off, -0.5f + z_off,  0.0f, 1.0f,
-		 0.5f + x_off, -0.5f + y_off, -0.5f + z_off,  0.0f, 1.0f,
-		 0.5f + x_off, -0.5f + y_off,  0.5f + z_off,  0.0f, 0.0f,
-		 0.5f + x_off,  0.5f + y_off,  0.5f + z_off,  1.0f, 0.0f,
+		 0.5f + x_off,  0.5f + y_off,  0.5f + z_off, 1.0f, 0.0f, 0.0f, tex_x+tex_size, 0.0f,
+		 0.5f + x_off,  0.5f + y_off, -0.5f + z_off, 1.0f, 0.0f, 0.0f, tex_x+tex_size, 1.0f,
+		 0.5f + x_off, -0.5f + y_off, -0.5f + z_off, 1.0f, 0.0f, 0.0f, tex_x, 1.0f,
+		 0.5f + x_off, -0.5f + y_off, -0.5f + z_off, 1.0f, 0.0f, 0.0f, tex_x, 1.0f,
+		 0.5f + x_off, -0.5f + y_off,  0.5f + z_off, 1.0f, 0.0f, 0.0f, tex_x, 0.0f,
+		 0.5f + x_off,  0.5f + y_off,  0.5f + z_off, 1.0f, 0.0f, 0.0f, tex_x+tex_size, 0.0f,
     };
 
     GLfloat bottom_verts[] = {
         //BOTTOM FACE
-		-0.5f + x_off, -0.5f + y_off, -0.5f + z_off,  0.0f, 1.0f,
-		 0.5f + x_off, -0.5f + y_off, -0.5f + z_off,  1.0f, 1.0f,
-		 0.5f + x_off, -0.5f + y_off,  0.5f + z_off,  1.0f, 0.0f,
-		 0.5f + x_off, -0.5f + y_off,  0.5f + z_off,  1.0f, 0.0f,
-		-0.5f + x_off, -0.5f + y_off,  0.5f + z_off,  0.0f, 0.0f,
-		-0.5f + x_off, -0.5f + y_off, -0.5f + z_off,  0.0f, 1.0f,
+		-0.5f + x_off, -0.5f + y_off, -0.5f + z_off, 0.0f, -1.0f, 0.0f, tex_x, 1.0f,
+		 0.5f + x_off, -0.5f + y_off, -0.5f + z_off, 0.0f, -1.0f, 0.0f, tex_x+tex_size, 1.0f,
+		 0.5f + x_off, -0.5f + y_off,  0.5f + z_off, 0.0f, -1.0f, 0.0f, tex_x+tex_size, 0.0f,
+		 0.5f + x_off, -0.5f + y_off,  0.5f + z_off, 0.0f, -1.0f, 0.0f, tex_x+tex_size, 0.0f,
+		-0.5f + x_off, -0.5f + y_off,  0.5f + z_off, 0.0f, -1.0f, 0.0f, tex_x, 0.0f,
+		-0.5f + x_off, -0.5f + y_off, -0.5f + z_off, 0.0f, -1.0f, 0.0f, tex_x, 1.0f,
     };
 
     GLfloat top_verts[] = {
         //TOP FACE
-		-0.5f + x_off,  0.5f + y_off, -0.5f + z_off,  0.0f, 1.0f,
-		 0.5f + x_off,  0.5f + y_off, -0.5f + z_off,  1.0f, 1.0f,
-		 0.5f + x_off,  0.5f + y_off,  0.5f + z_off,  1.0f, 0.0f,
-		 0.5f + x_off,  0.5f + y_off,  0.5f + z_off,  1.0f, 0.0f,
-		-0.5f + x_off,  0.5f + y_off,  0.5f + z_off,  0.0f, 0.0f,
-		-0.5f + x_off,  0.5f + y_off, -0.5f + z_off,  0.0f, 1.0f
+		-0.5f + x_off,  0.5f + y_off, -0.5f + z_off, 0.0f, 1.0f, 0.0f,  tex_x, 1.0f,
+		 0.5f + x_off,  0.5f + y_off, -0.5f + z_off, 0.0f, 1.0f, 0.0f,  tex_x+tex_size, 1.0f,
+		 0.5f + x_off,  0.5f + y_off,  0.5f + z_off, 0.0f, 1.0f, 0.0f,  tex_x+tex_size, 0.0f,
+		 0.5f + x_off,  0.5f + y_off,  0.5f + z_off, 0.0f, 1.0f, 0.0f,  tex_x+tex_size, 0.0f,
+		-0.5f + x_off,  0.5f + y_off,  0.5f + z_off, 0.0f, 1.0f, 0.0f,  tex_x, 0.0f,
+		-0.5f + x_off,  0.5f + y_off, -0.5f + z_off, 0.0f, 1.0f, 0.0f,  tex_x, 1.0f
     };
 
     //LEFT Face

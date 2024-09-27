@@ -27,6 +27,7 @@ void App::run() {
     Texture2D tex_grass("res/grass.png", GL_REPEAT, GL_NEAREST);
 
     Chunk test_chunk;
+    Chunk test_chunk_2(1, 0, 0);
 
     //3D projection matrices
     glm::mat4 projection = glm::mat4(1.0);
@@ -173,6 +174,7 @@ void App::run() {
 
         tex_grass.bind();
         test_chunk.DrawChunk();
+        test_chunk_2.DrawChunk();
         tex_grass.unbind();
         
         cube_shader.disable();

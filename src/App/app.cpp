@@ -20,73 +20,13 @@ void App::run() {
     bool wireframe=false;
 
     //Main camera
-    SpectatorCamera cam(glm::vec3(0, 0, 5));
+    SpectatorCamera cam(glm::vec3(0, 2, 5));
 
-    Shader test_shader("shaders/test_tex.vert", "shaders/test_tex.frag");
     Shader cube_shader("shaders/voxel.vert", "shaders/voxel.frag");
-    Texture2D tex_grass("res/grass.png", GL_REPEAT, GL_NEAREST);
     Texture2D chunk_tex("res/tilesheet.png", GL_REPEAT, GL_NEAREST);
 
     Chunk test_chunk;
     Chunk test_chunk_2(1, 0, 0);
-
-    //3D projection matrices
-    glm::mat4 projection = glm::mat4(1.0);
-    glm::mat4 cam_view = glm::mat4(1.0);
-    glm::mat4 model = glm::mat4(1.0);
-    
-    cam_view = glm::translate(cam_view, glm::vec3(0.0f, 0.0f, -5.0f));
-    projection = glm::perspective(glm::radians(45.0f), (float)window.getWidth()/(float)window.getHeight(), 0.1f, 100.0f);
-
-    //Cube
-	GLfloat cube_vertices[] =
-	{
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-	};
-
-    VertexArray VAO;
-    VAO.addBuffer(new Buffer(cube_vertices, sizeof(cube_vertices), 3), 0, 5, 0);
-    VAO.addBuffer(new Buffer(cube_vertices, sizeof(cube_vertices), 2), 1, 5, 3);
 
     //Disable mouse so you can look around
 	glfwSetInputMode(window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -107,12 +47,6 @@ void App::run() {
 
         calculateDeltaTime();
 
-        //ImGUI
-        ImGui::Begin("Debug");
-        ImGui::Text("FPS: %d",(int)(1.0f/deltaTime));
-        ImGui::Text("Position: %.2f, %.2f, %.2f", cam.position.x, cam.position.y, cam.position.z);
-        ImGui::End();
-
         //Process Spectator Camera Input
         if(window.isKeyHeld(GLFW_KEY_W)) {
             cam.processKeyboard(SpectatorCamera::FORWARD, deltaTime);
@@ -125,6 +59,10 @@ void App::run() {
         }
         if(window.isKeyHeld(GLFW_KEY_D)) {
             cam.processKeyboard(SpectatorCamera::RIGHT, deltaTime);
+        }
+         //Camera Rotation
+        if(focused) {
+            cam.processMouse(window.offset_x, window.offset_y);
         }
 
         //Other input
@@ -149,27 +87,9 @@ void App::run() {
             }
         }
 
-        //Camera Rotation
-        if(focused) {
-            cam.processMouse(window.offset_x, window.offset_y);
-        }
-
-        //Draw cube
-        test_shader.enable();
-        test_shader.setMatrix4("projection", projection);
-        test_shader.setMatrix4("view", cam.getViewMatrix());
-        test_shader.setMatrix4("model", glm::mat4(1.0f));
-
-        tex_grass.bind();
-        VAO.bind();
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        VAO.unbind();
-        tex_grass.unbind();
-        test_shader.disable();
-
         //Draw chunk
         cube_shader.enable();
-        cube_shader.setMatrix4("projection", projection);
+        cube_shader.setMatrix4("projection", cam.getProjectionMatrix(WIDTH, HEIGHT));
         cube_shader.setMatrix4("view", cam.getViewMatrix());
         cube_shader.setMatrix4("model", glm::mat4(1.0));
 
@@ -180,8 +100,11 @@ void App::run() {
         
         cube_shader.disable();
 
-        //ROTATE THAT SHIIII
-        model = glm::rotate(model, glm::radians(10.0f*deltaTime), glm::vec3(1.0f, 0.3f, 0.5f));
+        //ImGUI
+        ImGui::Begin("Debug");
+        ImGui::Text("FPS: %d",(int)(1.0f/deltaTime));
+        ImGui::Text("Position: %.2f, %.2f, %.2f", cam.position.x, cam.position.y, cam.position.z);
+        ImGui::End();
 
         //ImGUI update
         ImGui::Render();

@@ -66,6 +66,10 @@ void Chunk::AddCube(int x, int y, int z, Voxel::BLOCKTYPE block) {
     float y_off = y + CHUNK_SIZE*this->y + (float)(-CHUNK_SIZE)   + 0.5f;
     float z_off = z + CHUNK_SIZE*this->z + (float)(-CHUNK_SIZE)/2 + 0.5f;
 
+    x_off += this->x;
+    z_off += this->z;
+
+
     float tex_size = (1.0/4.0);
     float tex_x = tex_size*block;
 

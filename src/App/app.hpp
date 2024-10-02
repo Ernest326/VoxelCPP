@@ -18,14 +18,15 @@
 #include "../Engine/texture2d.hpp"
 #include "../Engine/spectator_camera.hpp"
 #include "../Engine/chunk.hpp"
+#include "../Engine/chunk_manager.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 
 class App {
 
 public:
-    static constexpr int WIDTH=800;
-    static constexpr int HEIGHT=800;
+    static constexpr int WIDTH=1920;
+    static constexpr int HEIGHT=1080;
 
     App();
     ~App();

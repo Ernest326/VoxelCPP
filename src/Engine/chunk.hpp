@@ -16,11 +16,12 @@ private:
     Voxel * * * m_voxels;
 
 public:
+    bool isDirty=false;
     Chunk(int x=0, int y=0, int z=0);
     ~Chunk();
     void DrawChunk();
+    glm::vec3 getPosition() { return glm::vec3(this->x, this->y, this->z); }
 private:
     void AddCube(int x, int y, int z, Voxel::BLOCKTYPE block);
     VertexArray GenerateBuffer();
-
 };

@@ -19,6 +19,8 @@ void App::run() {
     bool focused = true;
     bool wireframe=false;
 
+    ChunkManager chunkManager;
+
     //Main camera
     SpectatorCamera cam(glm::vec3(0, 2, 5));
 
@@ -99,11 +101,12 @@ void App::run() {
         chunk_tex.unbind();
         
         cube_shader.disable();
-
+        glm::vec3 chunk_pos = chunkManager.getNearestChunkPos(cam.position);
         //ImGUI
         ImGui::Begin("Debug");
         ImGui::Text("FPS: %d",(int)(1.0f/deltaTime));
         ImGui::Text("Position: %.2f, %.2f, %.2f", cam.position.x, cam.position.y, cam.position.z);
+        ImGui::Text("Chunk Position: %.0f, %.0f, %.0f", chunk_pos.x, chunk_pos.y, chunk_pos.z);
         ImGui::End();
 
         //ImGUI update

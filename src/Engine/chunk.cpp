@@ -6,17 +6,6 @@ Chunk::Chunk(int x, int y, int z) {
     this->y = y;
     this->z = z;
 
-    m_voxels = new Voxel **[CHUNK_SIZE];
-
-    for (int i = 0; i < CHUNK_SIZE; i++) {
-        m_voxels[i] = new Voxel *[CHUNK_SIZE];
-        for (int j = 0; j < CHUNK_SIZE; j++) {
-            m_voxels[i][j] = new Voxel[CHUNK_SIZE];
-        }
-    }
-
-    this->m_chunkVAO = GenerateBuffer();
-
 }
 
 Chunk::~Chunk() {
@@ -29,6 +18,23 @@ Chunk::~Chunk() {
     }
     delete[] m_voxels;
 
+}
+
+void Chunk::setup() {
+
+    m_voxels = new Voxel **[CHUNK_SIZE];
+
+    for (int i = 0; i < CHUNK_SIZE; i++) {
+        m_voxels[i] = new Voxel *[CHUNK_SIZE];
+        for (int j = 0; j < CHUNK_SIZE; j++) {
+            m_voxels[i][j] = new Voxel[CHUNK_SIZE];
+            if(this->y<=0) {
+                m_voxels[i][j]->setActive(true);
+            }
+        }
+    }
+
+    this->m_chunkVAO = GenerateBuffer();
 }
 
 void Chunk::DrawChunk() {
@@ -132,6 +138,8 @@ void Chunk::AddCube(int x, int y, int z, Voxel::BLOCKTYPE block) {
 		-0.5f + x_off,  0.5f + y_off,  0.5f + z_off, 0.0f, 1.0f, 0.0f,  tex_x, 0.0f,
 		-0.5f + x_off,  0.5f + y_off, -0.5f + z_off, 0.0f, 1.0f, 0.0f,  tex_x, 1.0f
     };
+
+    //Check for neighbours, and only draw the cube faces that are required i.e. there arent any neighbouring covering the face
 
     //LEFT Face
     if(x>0&&!m_voxels[x-1][y][z].getActive() || x==0) {

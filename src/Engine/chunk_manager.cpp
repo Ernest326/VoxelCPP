@@ -17,23 +17,91 @@ glm::vec3 ChunkManager::getNearestChunkPos(glm::vec3 real_pos) {
     return glm::vec3(x, y, z);
 }
 
+void ChunkManager::setupChunks() {
+    
+    int last = MAX_LOAD;
+    if(m_setupQueue.size()<last) {
+        last=m_setupQueue.size()-1;
+    }
+
+    for(int i=0; i<last; i++) {
+        m_setupQueue[m_setupQueue.size()-1]->setup();
+        m_setupQueue.pop_back();
+    }
+}
+
 
 void ChunkManager::loadNewChunks(glm::vec3 position) {
 
+    glm::vec3 pos = getNearestChunkPos(position);
+
+    for(int x=-LOAD_DISTANCE; x<=LOAD_DISTANCE; ++x) {
+        for(int y=-LOAD_DISTANCE; y<=LOAD_DISTANCE; ++y) {
+            for(int z=-LOAD_DISTANCE; z<=LOAD_DISTANCE; ++z) {
+
+                std::tuple chunk_pos = {pos.x+x,pos.y+y,pos.z+z};
+
+                if(!chunks.count(chunk_pos)) {
+                    chunks.emplace(chunk_pos, Chunk(x,y,z));
+                    m_setupQueue.push_back(&chunks.at(chunk_pos));
+                }
+            }
+        }
+    }
 }
 
-void ChunkManager::updateChunks(glm::vec3 position) {
-
+void ChunkManager::updateChunks() {
+    for (auto& [key, chunk]: chunks) { 
+        if (chunk.isDirty) {
+            chunk.isDirty=false;
+            m_setupQueue.push_back(&chunk);
+        }
+    }
 }
 
 void ChunkManager::unloadChunks(glm::vec3 position) {
 
+    glm::vec3 pos = getNearestChunkPos(position);
+
+    for (auto& [key, chunk]: chunks) {
+        glm::vec3 chunk_pos = chunk.getPosition();
+        chunk_pos -= pos;
+        chunk_pos = glm::abs(chunk_pos);
+
+        if (chunk_pos.x > UNLOAD_DISTANCE || chunk_pos.y > UNLOAD_DISTANCE || chunk_pos.z > UNLOAD_DISTANCE) {
+            m_setupQueue.erase(std::remove(m_setupQueue.begin(), m_setupQueue.end(), chunk), m_setupQueue.end());
+            m_renderQueue.erase(std::remove(m_renderQueue.begin(), m_renderQueue.end(), chunk), m_renderQueue.end());
+            chunks.erase(key);
+        }
+    }
+
 }
 
 void ChunkManager::renderChunks(glm::vec3 position) {
-    
+
+    glm::vec3 pos = getNearestChunkPos(position);
+
+    if(m_renderQueue.size() > 0) {
+        for(int i=0; i<m_renderQueue.size(); i++) {
+
+            glm::vec3 chunk_pos = m_renderQueue[i]->getPosition();
+            chunk_pos -= pos;
+            chunk_pos = glm::abs(chunk_pos);
+
+            if(chunk_pos.x<DRAW_DISTANCE && chunk_pos.y<DRAW_DISTANCE && chunk_pos.z<DRAW_DISTANCE) {
+                m_renderQueue[i]->DrawChunk();
+            }
+        }
+    }
 }
 
 void ChunkManager::chunkUpdate(glm::vec3 position) {
-    //Do chunk loading shit here
+    loadNewChunks(position);
+    updateChunks();
+    setupChunks();
+}
+
+void ChunkManager::chunkRender(glm::vec3 position) {
+    unloadChunks(position);
+    renderChunks(position);
 }

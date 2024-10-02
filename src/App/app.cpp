@@ -27,8 +27,8 @@ void App::run() {
     Shader cube_shader("shaders/voxel.vert", "shaders/voxel.frag");
     Texture2D chunk_tex("res/tilesheet.png", GL_REPEAT, GL_NEAREST);
 
-    Chunk test_chunk;
-    Chunk test_chunk_2(1, 0, 0);
+    //Chunk test_chunk;
+    //Chunk test_chunk_2(1, 0, 0);
 
     //Disable mouse so you can look around
 	glfwSetInputMode(window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -89,7 +89,10 @@ void App::run() {
             }
         }
 
+        chunkManager.chunkUpdate(cam.position);
+
         //Draw chunk
+        /*
         cube_shader.enable();
         cube_shader.setMatrix4("projection", cam.getProjectionMatrix(WIDTH, HEIGHT));
         cube_shader.setMatrix4("view", cam.getViewMatrix());
@@ -101,6 +104,14 @@ void App::run() {
         chunk_tex.unbind();
         
         cube_shader.disable();
+        */
+
+        cube_shader.enable();
+        chunk_tex.bind();
+        chunkManager.chunkRender(cam.position);
+        chunk_tex.unbind();
+        cube_shader.disable();
+
         glm::vec3 chunk_pos = chunkManager.getNearestChunkPos(cam.position);
         //ImGUI
         ImGui::Begin("Debug");

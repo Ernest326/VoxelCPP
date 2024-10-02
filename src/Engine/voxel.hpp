@@ -13,10 +13,10 @@ public:
     };
 private:
     BLOCKTYPE m_block_type;
-    bool m_active=true;
+    bool m_active=false;
 public:
     Voxel(BLOCKTYPE block=GRASS) { m_block_type=block; }
     BLOCKTYPE getBlockType() { return m_block_type; }
-    void setActive() { m_active=true; }
+    void setActive(bool active) { m_active=active; }
     bool getActive() { return m_active; }
 };

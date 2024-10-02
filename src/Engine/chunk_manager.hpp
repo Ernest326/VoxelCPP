@@ -1,15 +1,9 @@
 #pragma once
 #include "chunk.hpp"
-#include <unordered_map>
+#include <iostream>
 #include <tuple>
-
-//Maximum number of draw calls per frame
-#define MAX_DRAW=6;
-
-//Distance stuff
-#define LOAD_DISTANCE=4;
-#define DRAW_DISTANCE=3;
-#define UNLOAD_DISTANCE=8;
+#include <algorithm>
+#include <unordered_map>
 
 //Hash function for tuple, since std::tuple doesnt have a default hash function and unordered_map requires a std::hash for mapping stuff
 //Found this on a stack overflow thread :)
@@ -28,21 +22,28 @@ struct tuple_hash {
 class ChunkManager {
 
 private:
+    //Maximum number of setup calls per frame
+    unsigned int MAX_LOAD=6;
+    unsigned int LOAD_DISTANCE=4;
+    unsigned int UNLOAD_DISTANCE=8;
+    unsigned int DRAW_DISTANCE=3;
+
     std::unordered_map<std::tuple<int, int, int>, Chunk, tuple_hash> chunks;
     std::vector<Chunk*> m_renderQueue;
-    std::vector<Chunk*> m_updateQueue;
-    std::vector<Chunk*> m_unloadQueue;
+    std::vector<Chunk*> m_setupQueue;
 
     void loadNewChunks(glm::vec3 position);
-    void updateChunks(glm::vec3 position);
     void unloadChunks(glm::vec3 position);
     void renderChunks(glm::vec3 position);
+    void setupChunks();
+    void updateChunks();
 
 
 public:
     glm::vec3 getNearestChunkPos(glm::vec3 real_pos);
     void chunkUpdate(glm::vec3 position);
+    void chunkRender(glm::vec3 position);
+
     ChunkManager();
     ~ChunkManager();
-
 };

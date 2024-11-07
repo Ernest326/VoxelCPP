@@ -29,7 +29,9 @@ void Chunk::setup() {
         for (int j = 0; j < CHUNK_SIZE; j++) {
             m_voxels[i][j] = new Voxel[CHUNK_SIZE];
             if(this->y<=0) {
-                m_voxels[i][j]->setActive(true);
+                for(int k=0; k < CHUNK_SIZE; k++) {
+                    m_voxels[i][j][k].setActive(true);
+                }
             }
         }
     }

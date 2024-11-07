@@ -23,11 +23,12 @@ class ChunkManager {
 
 private:
     //Maximum number of setup calls per frame
-    unsigned int MAX_LOAD=6;
-    unsigned int LOAD_DISTANCE=4;
-    unsigned int UNLOAD_DISTANCE=8;
-    unsigned int DRAW_DISTANCE=3;
+    int MAX_LOAD=6;
+    int LOAD_DISTANCE=4;
+    int UNLOAD_DISTANCE=8;
+    int DRAW_DISTANCE=3;
 
+    std::unordered_map<std::tuple<int, int, int>, int, tuple_hash> test;
     std::unordered_map<std::tuple<int, int, int>, Chunk, tuple_hash> chunks;
     std::vector<Chunk*> m_renderQueue;
     std::vector<Chunk*> m_setupQueue;

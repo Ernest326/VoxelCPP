@@ -27,7 +27,8 @@ void App::run() {
     Shader cube_shader("shaders/voxel.vert", "shaders/voxel.frag");
     Texture2D chunk_tex("res/tilesheet.png", GL_REPEAT, GL_NEAREST);
 
-    //Chunk test_chunk;
+    Chunk test_chunk;
+    test_chunk.setup();
     //Chunk test_chunk_2(1, 0, 0);
 
     //Disable mouse so you can look around
@@ -48,6 +49,7 @@ void App::run() {
         ImGui::NewFrame();
 
         calculateDeltaTime();
+        chunkManager.chunkUpdate(cam.position);
 
         //Process Spectator Camera Input
         if(window.isKeyHeld(GLFW_KEY_W)) {
@@ -107,7 +109,11 @@ void App::run() {
         */
 
         cube_shader.enable();
+        cube_shader.setMatrix4("projection", cam.getProjectionMatrix(WIDTH, HEIGHT));
+        cube_shader.setMatrix4("view", cam.getViewMatrix());
+        cube_shader.setMatrix4("model", glm::mat4(1.0));
         chunk_tex.bind();
+        test_chunk.DrawChunk();
         chunkManager.chunkRender(cam.position);
         chunk_tex.unbind();
         cube_shader.disable();

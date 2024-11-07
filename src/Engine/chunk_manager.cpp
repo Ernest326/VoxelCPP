@@ -1,7 +1,9 @@
 #include "chunk_manager.hpp"
 
 ChunkManager::ChunkManager() {
-
+    //CAUSE CRASH!!
+    //chunks.emplace(std::make_tuple(0, 0, 1), std::move(Chunk(0,0,1)));
+    chunks.insert({std::make_tuple(0, 0, 1), Chunk(0,0,1)});
 }
 
 ChunkManager::~ChunkManager() {
@@ -42,8 +44,10 @@ void ChunkManager::loadNewChunks(glm::vec3 position) {
                 std::tuple chunk_pos = {pos.x+x,pos.y+y,pos.z+z};
 
                 if(!chunks.count(chunk_pos)) {
-                    chunks.emplace(chunk_pos, Chunk(x,y,z));
-                    m_setupQueue.push_back(&chunks.at(chunk_pos));
+                    //chunks.emplace(chunk_pos, Chunk(x,y,z));
+                    //m_setupQueue.push_back(&chunks.at(chunk_pos));
+                } else {
+                    std::cout << pos.x+x << " , " << pos.y+y << pos.z+z << std::endl;
                 }
             }
         }
@@ -69,8 +73,8 @@ void ChunkManager::unloadChunks(glm::vec3 position) {
         chunk_pos = glm::abs(chunk_pos);
 
         if (chunk_pos.x > UNLOAD_DISTANCE || chunk_pos.y > UNLOAD_DISTANCE || chunk_pos.z > UNLOAD_DISTANCE) {
-            m_setupQueue.erase(std::remove(m_setupQueue.begin(), m_setupQueue.end(), chunk), m_setupQueue.end());
-            m_renderQueue.erase(std::remove(m_renderQueue.begin(), m_renderQueue.end(), chunk), m_renderQueue.end());
+            m_setupQueue.erase(std::remove(m_setupQueue.begin(), m_setupQueue.end(), &chunk), m_setupQueue.end());
+            m_renderQueue.erase(std::remove(m_renderQueue.begin(), m_renderQueue.end(), &chunk), m_renderQueue.end());
             chunks.erase(key);
         }
     }
@@ -96,12 +100,12 @@ void ChunkManager::renderChunks(glm::vec3 position) {
 }
 
 void ChunkManager::chunkUpdate(glm::vec3 position) {
-    loadNewChunks(position);
-    updateChunks();
-    setupChunks();
+    //loadNewChunks(position);
+    //updateChunks();
+    //setupChunks();
 }
 
 void ChunkManager::chunkRender(glm::vec3 position) {
-    unloadChunks(position);
-    renderChunks(position);
+    //unloadChunks(position);
+    //renderChunks(position);
 }

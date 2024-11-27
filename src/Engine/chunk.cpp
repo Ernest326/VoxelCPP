@@ -10,17 +10,29 @@ Chunk::Chunk(int x, int y, int z) {
 
 Chunk::~Chunk() {
 
-    for (int i = 0; i < CHUNK_SIZE; ++i) {
-        for (int j = 0; j < CHUNK_SIZE; ++j) {
-            delete[] m_voxels[i][j];
+    if (m_voxels) {
+        for (int i = 0; i < CHUNK_SIZE; ++i) {
+            for (int j = 0; j < CHUNK_SIZE; ++j) {
+                delete[] m_voxels[i][j];
+            }
+            delete[] m_voxels[i];
         }
-        delete[] m_voxels[i];
+        delete[] m_voxels;
     }
-    delete[] m_voxels;
 
 }
 
 void Chunk::setup() {
+
+    if (m_voxels) { // Free any previously allocated memory
+        for (int i = 0; i < CHUNK_SIZE; ++i) {
+            for (int j = 0; j < CHUNK_SIZE; ++j) {
+                delete[] m_voxels[i][j];
+            }
+            delete[] m_voxels[i];
+        }
+        delete[] m_voxels;
+    }
 
     m_voxels = new Voxel **[CHUNK_SIZE];
 

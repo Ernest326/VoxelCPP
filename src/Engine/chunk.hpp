@@ -13,7 +13,7 @@ private:
     const int CHUNK_SIZE = 16;
     VertexArray m_chunkVAO;
     std::vector<GLfloat> m_vertexinfo;
-    Voxel * * * m_voxels;
+    Voxel * * * m_voxels = nullptr;
 
 public:
     bool isDirty=false;

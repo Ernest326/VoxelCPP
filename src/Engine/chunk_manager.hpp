@@ -1,6 +1,7 @@
 #pragma once
 #include "chunk.hpp"
 #include <iostream>
+#include <memory>
 #include <tuple>
 #include <algorithm>
 #include <unordered_map>
@@ -23,28 +24,15 @@ class ChunkManager {
 
 private:
     //Maximum number of setup calls per frame
-    int MAX_LOAD=6;
-    int LOAD_DISTANCE=4;
-    int UNLOAD_DISTANCE=8;
-    int DRAW_DISTANCE=3;
+    int VIEW_DISTANCE
 
-    std::unordered_map<std::tuple<int, int, int>, int, tuple_hash> test;
-    std::unordered_map<std::tuple<int, int, int>, Chunk, tuple_hash> chunks;
-    std::vector<Chunk*> m_renderQueue;
-    std::vector<Chunk*> m_setupQueue;
-
-    void loadNewChunks(glm::vec3 position);
-    void unloadChunks(glm::vec3 position);
-    void renderChunks(glm::vec3 position);
-    void setupChunks();
-    void updateChunks();
-
+    std::unordered_map<std::tuple<int, int, int>, std::shared_ptr<Chunk>, tuple_hash> chunks;
+    std::vector<std::share_ptr<Chunk>> loaded_chunks;
 
 public:
     glm::vec3 getNearestChunkPos(glm::vec3 real_pos);
-    void chunkUpdate(glm::vec3 position);
-    void chunkRender(glm::vec3 position);
-
+    void update(glm::vec3 playerPos);
+    void draw();
     ChunkManager();
     ~ChunkManager();
 };

@@ -49,7 +49,7 @@ void App::run() {
         ImGui::NewFrame();
 
         calculateDeltaTime();
-        //chunkManager.chunkUpdate(cam.position);
+        chunkManager.update(chunkManager.getNearestChunkPos(cam.position));
 
         //Process Spectator Camera Input
         if(window.isKeyHeld(GLFW_KEY_W)) {

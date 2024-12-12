@@ -3,20 +3,22 @@
 ChunkManager::ChunkManager() {
     //CAUSE CRASH!!
     //chunks.emplace(std::make_tuple(0, 0, 1), std::move(Chunk(0,0,1)));
-    chunks.insert({std::make_tuple(0, 0, 1), std::make_shared<Chunk(0,0,1)>});
-    chunks.at(std::make_tuple(0, 0, 1)).setup();
+    chunks.insert({std::make_tuple(0, 0, 1), std::make_unique<Chunk>(0,0,1)});
+    chunks[std::make_tuple(0,0,1)]->setup();
 }
 
 ChunkManager::~ChunkManager() {
 
 }
 
-void update(glm::vec3 playerPos) {
+void ChunkManager::update(glm::vec3 playerPos) {
 
 }
 
-void render() {
-    
+void ChunkManager::draw(glm::vec3 playerPos) {
+    for (const auto& [pos, chunk] : chunks) {
+        chunk->DrawChunk();
+    }
 }
 
 glm::vec3 ChunkManager::getNearestChunkPos(glm::vec3 real_pos) {

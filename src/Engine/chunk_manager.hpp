@@ -24,15 +24,13 @@ class ChunkManager {
 
 private:
     //Maximum number of setup calls per frame
-    int VIEW_DISTANCE
-
-    std::unordered_map<std::tuple<int, int, int>, std::shared_ptr<Chunk>, tuple_hash> chunks;
-    std::vector<std::share_ptr<Chunk>> loaded_chunks;
+    const int VIEW_DISTANCE = 4;
+    std::unordered_map<std::tuple<int, int, int>, std::unique_ptr<Chunk>, tuple_hash> chunks;
 
 public:
     glm::vec3 getNearestChunkPos(glm::vec3 real_pos);
     void update(glm::vec3 playerPos);
-    void draw();
+    void draw(glm::vec3 playerPos);
     ChunkManager();
     ~ChunkManager();
 };
